@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alex Rivera — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e14;
+    --surface:#12161f;
+    --surface-2:#171c27;
+    --line:#242b38;
+    --text:#e6e6e2;
+    --muted:#8a92a3;
+    --amber:#e3b341;
+    --violet:#8b93ff;
+    --green:#5fd08a;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
+
+  ::selection{background:var(--amber);color:#0b0e14;}
+
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+
+  /* subtle background grid, like an editor gutter */
+  body{
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px);
+    background-size: 100% 48px;
+    background-attachment:fixed;
+    background-position: 0 88px;
+  }
+
+  /* ===== NAV — editor tabs ===== */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,14,20,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .navbar{
+    display:flex;align-items:center;gap:4px;
+    max-width:960px;margin:0 auto;padding:0 24px;
+    height:56px;overflow-x:auto;
+  }
+  .navbar .brand{
+    font-family:var(--mono);font-weight:700;font-size:14px;
+    color:var(--amber);margin-right:20px;white-space:nowrap;
+  }
+  .navbar .brand::before{content:'~/ ';color:var(--muted);}
+  .tab{
+    font-family:var(--mono);font-size:13px;
+    display:flex;align-items:center;gap:8px;
+    padding:8px 14px;border-radius:6px 6px 0 0;
+    color:var(--muted);white-space:nowrap;
+    border:1px solid transparent;
+    transition:color .15s ease, background .15s ease;
+  }
+  .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--line);}
+  .tab:hover{color:var(--text);background:var(--surface);}
+  .tab.active{
+    color:var(--text);background:var(--surface);
+    border-color:var(--line);border-bottom-color:var(--surface);
+  }
+  .tab.active .dot{background:var(--amber);}
+
+  /* ===== HERO — terminal ===== */
+  .hero{padding:88px 0 64px;}
+  .terminal{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .term-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 16px;border-bottom:1px solid var(--line);
+    background:var(--surface-2);
+  }
+  .term-dot{width:11px;height:11px;border-radius:50%;}
+  .term-dot:nth-child(1){background:#ff5f57;}
+  .term-dot:nth-child(2){background:#febc2e;}
+  .term-dot:nth-child(3){background:#28c840;}
+  .term-title{
+    margin-left:8px;font-family:var(--mono);font-size:12px;color:var(--muted);
+  }
+  .term-body{padding:32px 28px 36px;font-family:var(--mono);}
+  .term-line{color:var(--muted);font-size:14px;margin-bottom:6px;}
+  .term-line .prompt{color:var(--green);}
+  .term-line .cmd{color:var(--text);}
+  .term-output{margin:18px 0 22px;}
+  .term-output h1{
+    font-size:clamp(28px,5vw,44px);
+    font-weight:800;letter-spacing:-0.02em;line-height:1.15;
+    color:var(--text);
+  }
+  .term-output h1 .accent{color:var(--amber);}
+  .term-output p{
+    font-family:var(--sans);color:var(--muted);
+    font-size:16px;margin-top:14px;max-width:520px;
+  }
+  .caret{
+    display:inline-block;width:9px;height:1.1em;background:var(--amber);
+    margin-left:4px;vertical-align:text-bottom;
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  .hero-cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono);font-size:13px;font-weight:500;
+    padding:11px 20px;border-radius:6px;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary{background:var(--amber);color:#0b0e14;font-weight:700;}
+  .btn-primary:hover{transform:translateY(-1px);background:#f0c65a;}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--amber);color:var(--amber);}
+
+  /* ===== SECTION shared ===== */
+  section{padding:72px 0;}
+  .section-head{
+    display:flex;align-items:baseline;gap:12px;margin-bottom:32px;
+    border-bottom:1px solid var(--line);padding-bottom:16px;
+  }
+  .file-tag{
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+    background:var(--surface);border:1px solid var(--line);
+    padding:4px 10px;border-radius:4px;
+  }
+  .section-head h2{
+    font-family:var(--mono);font-size:22px;font-weight:700;color:var(--text);
+  }
+
+  /* ===== ABOUT ===== */
+  .about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:start;}
+  .code-block{
+    background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    padding:22px 24px;font-family:var(--mono);font-size:13.5px;line-height:1.85;
+  }
+  .code-block .cm{color:var(--muted);}
+  .code-block .kw{color:var(--violet);}
+  .code-block .str{color:var(--green);}
+  .code-block .prop{color:var(--amber);}
+  .about-text p{color:var(--muted);margin-bottom:14px;font-size:15px;}
+  .about-text p strong{color:var(--text);font-weight:600;}
+
+  .skills{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px;}
+  .skill{
+    font-family:var(--mono);font-size:12.5px;
+    padding:6px 12px;border-radius:20px;
+    border:1px solid var(--line);color:var(--muted);
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .skill:hover{border-color:var(--amber);color:var(--amber);}
+
+  /* ===== PROJECTS ===== */
+  .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  .project-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:24px;display:flex;flex-direction:column;gap:12px;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .project-card:hover{border-color:var(--amber);transform:translateY(-3px);}
+  .project-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .project-top h3{font-size:17px;font-weight:700;}
+  .project-status{
+    font-family:var(--mono);font-size:10.5px;color:var(--green);
+    border:1px solid rgba(95,208,138,0.3);background:rgba(95,208,138,0.08);
+    padding:3px 8px;border-radius:20px;white-space:nowrap;
+  }
+  .project-card p{color:var(--muted);font-size:14px;}
+  .project-stack{
+    display:flex;flex-wrap:wrap;gap:6px;font-family:var(--mono);
+    font-size:11px;color:var(--muted);margin-top:auto;padding-top:10px;
+  }
+  .project-stack span{
+    background:var(--surface-2);border:1px solid var(--line);
+    padding:3px 8px;border-radius:4px;
+  }
+  .project-link{
+    font-family:var(--mono);font-size:12.5px;color:var(--amber);
+    display:inline-flex;align-items:center;gap:6px;margin-top:4px;
+  }
+  .project-link:hover{text-decoration:underline;}
+
+  /* ===== CONTACT ===== */
+  .contact-panel{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:36px;text-align:left;
+  }
+  .contact-panel .term-line{margin-bottom:10px;}
+  .contact-links{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px;}
+  .contact-links a{
+    font-family:var(--mono);font-size:14px;
+    padding:10px 18px;border:1px solid var(--line);border-radius:6px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .contact-links a:hover{border-color:var(--amber);color:var(--amber);}
+
+  /* ===== FOOTER — status bar ===== */
+  footer{
+    border-top:1px solid var(--line);
+    background:var(--surface);
+    font-family:var(--mono);font-size:11.5px;color:var(--muted);
+  }
+  .status-bar{
+    max-width:960px;margin:0 auto;padding:10px 24px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+  .status-bar span.ok{color:var(--green);}
+
+  @media (max-width:720px){
+    .about-grid{grid-template-columns:1fr;}
+    .projects{grid-template-columns:1fr;}
+    body{background-position:0 56px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .caret{animation:none;opacity:1;}
+    .project-card:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="navbar" aria-label="Primary">
+    <span class="brand">portfolio</span>
+    <a class="tab active" href="#home"><span class="dot"></span>index.html</a>
+    <a class="tab" href="#about"><span class="dot"></span>about.js</a>
+    <a class="tab" href="#projects"><span class="dot"></span>projects.json</a>
+    <a class="tab" href="#contact"><span class="dot"></span>contact.sh</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero wrap" id="home">
+    <div class="terminal">
+      <div class="term-bar">
+        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+        <span class="term-title">zsh — alex@portfolio: ~</span>
+      </div>
+      <div class="term-body">
+        <div class="term-line"><span class="prompt">➜</span> <span class="cmd">whoami</span></div>
+        <div class="term-output">
+          <h1>Alex Rivera<br><span class="accent">Full-Stack Developer</span><span class="caret" aria-hidden="true"></span></h1>
+          <p>I build fast, reliable web applications — from database schema to pixel-perfect UI. Currently shipping product at a Series-B startup, open to interesting freelance work.</p>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#projects">./view-projects</a>
+          <a class="btn btn-ghost" href="#contact">get-in-touch --now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="wrap" id="about">
+    <div class="section-head">
+      <span class="file-tag">about.js</span>
+      <h2>About</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><strong>Five years</strong> building web products end to end — React on the front, Node and Postgres underneath, deployed on infrastructure I actually understand.</p>
+        <p>I care most about the parts users never see: response times, error states, and code the next person can read without a walkthrough. Previously at a fintech startup, where I helped scale the platform from 10K to 400K users.</p>
+        <p>Outside of work I contribute to a couple of open-source dev tools and mentor junior engineers through a local coding bootcamp.</p>
+        <div class="skills">
+          <span class="skill">TypeScript</span>
+          <span class="skill">React</span>
+          <span class="skill">Node.js</span>
+          <span class="skill">PostgreSQL</span>
+          <span class="skill">Docker</span>
+          <span class="skill">AWS</span>
+          <span class="skill">GraphQL</span>
+          <span class="skill">Python</span>
+        </div>
+      </div>
+      <div class="code-block" aria-hidden="true">
+<span class="kw">const</span> developer = {<br>
+&nbsp;&nbsp;<span class="prop">name</span>: <span class="str">'Alex Rivera'</span>,<br>
+&nbsp;&nbsp;<span class="prop">role</span>: <span class="str">'Full-Stack Developer'</span>,<br>
+&nbsp;&nbsp;<span class="prop">location</span>: <span class="str">'Remote'</span>,<br>
+&nbsp;&nbsp;<span class="prop">experience</span>: <span class="str">'5 years'</span>,<br>
+&nbsp;&nbsp;<span class="prop">focus</span>: [<span class="str">'performance'</span>, <span class="str">'DX'</span>],<br>
+&nbsp;&nbsp;<span class="prop">available</span>: <span class="kw">true</span>,<br>
+};<br>
+<span class="cm">// always shipping something</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="wrap" id="projects">
+    <div class="section-head">
+      <span class="file-tag">projects.json</span>
+      <h2>Selected Work</h2>
+    </div>
+    <div class="projects">
+
+      <div class="project-card">
+        <div class="project-top">
+          <h3>Ledger</h3>
+          <span class="project-status">Live</span>
+        </div>
+        <p>A real-time expense-splitting app for shared households — handles balances, recurring bills, and settlement suggestions for 12K+ active users.</p>
+        <div class="project-stack">
+          <span>React</span><span>Node</span><span>PostgreSQL</span><span>WebSockets</span>
+        </div>
+        <a class="project-link" href="#">view case study →</a>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top">
+          <h3>Routewise</h3>
+          <span class="project-status">Live</span>
+        </div>
+        <p>Logistics dashboard that recomputes delivery routes on the fly using live traffic data, cutting average delivery time by 18%.</p>
+        <div class="project-stack">
+          <span>TypeScript</span><span>Next.js</span><span>Redis</span><span>Mapbox</span>
+        </div>
+        <a class="project-link" href="#">view case study →</a>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top">
+          <h3>Formless</h3>
+          <span class="project-status">Open source</span>
+        </div>
+        <p>A headless form-builder library with schema validation baked in — 3.2K GitHub stars, used in production by a handful of small startups.</p>
+        <div class="project-stack">
+          <span>TypeScript</span><span>Zod</span><span>Vite</span>
+        </div>
+        <a class="project-link" href="#">view on GitHub →</a>
+      </div>
+
+      <div class="project-card">
+        <div class="project-top">
+          <h3>Pulsecheck</h3>
+          <span class="project-status">Live</span>
+        </div>
+        <p>Lightweight uptime and status-page tool for small teams — self-hostable, with a 60-second setup and Slack alerting.</p>
+        <div class="project-stack">
+          <span>Go</span><span>SQLite</span><span>htmx</span>
+        </div>
+        <a class="project-link" href="#">view case study →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="wrap" id="contact">
+    <div class="section-head">
+      <span class="file-tag">contact.sh</span>
+      <h2>Get in touch</h2>
+    </div>
+    <div class="contact-panel">
+      <div class="term-line"><span class="prompt">➜</span> <span class="cmd">cat contact.sh</span></div>
+      <p style="color:var(--muted);font-size:15px;max-width:520px;margin-top:6px;">
+        Have a project in mind, or just want to talk shop? My inbox is open — I usually reply within a day.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:alex.rivera@example.com">✉ alex.rivera@example.com</a>
+        <a href="#">↗ github.com/alexrivera</a>
+        <a href="#">↗ linkedin.com/in/alexrivera</a>
+        <a href="#">↗ resume.pdf</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="status-bar">
+    <span><span class="ok">●</span> main · no conflicts</span>
+    <span>UTF-8 · LF</span>
+    <span>Ln 42, Col 7</span>
+    <span>© 2026 Alex Rivera</span>
+  </div>
+</footer>
+
+<script>
+  // active tab highlight on scroll
+  const sections = document.querySelectorAll('main section[id]');
+  const tabs = document.querySelectorAll('.tab');
+  const setActive = () => {
+    let current = sections[0].id;
+    const offset = 90;
+    sections.forEach(sec => {
+      if (window.scrollY + offset >= sec.offsetTop) current = sec.id;
+    });
+    tabs.forEach(t => {
+      t.classList.toggle('active', t.getAttribute('href') === '#' + current);
+    });
+  };
+  window.addEventListener('scroll', setActive, {passive:true});
+  setActive();
+</script>
+
+</body>
+</html>
